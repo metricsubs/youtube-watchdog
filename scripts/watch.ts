@@ -4,7 +4,6 @@ import {
   CONFIG_JSON_FILE_PATH,
   PUBLIC_DIR,
   VIDEO_DIR,
-  VIDEO_META_TEST_PATH,
   WATCHDOG_META_FILE_PATH,
 } from "./@utils/path";
 import type {
@@ -20,6 +19,7 @@ import Axios from "axios";
 import { CI_JOB_ID } from "./@utils/env";
 import { promisify } from "util";
 import _glob from "glob";
+import { info } from "console";
 
 const MAX_SAVED_VIDEO_NUM = 10;
 const glob = promisify(_glob);
@@ -34,6 +34,7 @@ async function main() {
   let metaChannels: WatchdogChannelMeta[] = [];
 
   for (let channelInfo of config.channels) {
+    console.info(`Updating channel ${channelInfo.name}(${channelInfo.id})...`);
     let channelMeta = metaData?.channels.find(
       (channelMeta) => channelMeta.id === channelInfo.id
     );
@@ -50,6 +51,8 @@ async function main() {
 
     metaChannels.push(newChannelMeta);
   }
+
+  console.info(`Generating new meta data...`);
 
   let newMetaData = {
     updatedAt: Date.now(),
@@ -102,6 +105,7 @@ async function runOnChannelAndGenerateMeta(
   channelInfo: WatchdogChannelInfo,
   originalMetaData: WatchdogChannelMeta
 ): Promise<WatchdogChannelMeta> {
+  console.info(" - Getting latest videos...");
   let videoIds = await YouTube.getLatestVideoIds(channelInfo.id);
   if (!videoIds.length) {
     console.warn(
@@ -111,6 +115,8 @@ async function runOnChannelAndGenerateMeta(
   }
 
   let videoId = videoIds[0];
+
+  console.info(` - Latest video ID: ${videoId}`);
 
   if (originalMetaData && originalMetaData.latestVideoId === videoId) {
     console.info(
@@ -142,6 +148,7 @@ async function downloadYouTubeVideo(
   config: WatchdogConfig,
   videoId: string
 ): Promise<WatchdogVideoMeta> {
+  console.info(` - Fetching video(${videoId}) available formats...`);
   let formats = await YouTube.getAvailableFormats(videoId);
 
   let previewFormat = YouTube.selectBestDownloadFormat(formats, "1080p");
@@ -152,6 +159,8 @@ async function downloadYouTubeVideo(
   if (!previewFormat) {
     throw new Error(`No 1080p source available.`);
   }
+
+  console.info(` - Downloading 1080p video...`);
 
   await YouTube.downloadVideo(videoId, {
     toDir: VIDEO_DIR,
@@ -238,6 +247,8 @@ async function downloadYouTubeVideo(
   let maxFormat = YouTube.selectBestDownloadFormat(formats, "2160p");
 
   if (maxFormat) {
+    console.info(` - Downloading 4k video...`);
+
     await YouTube.downloadVideo(videoId, {
       toDir: VIDEO_DIR,
       format: maxFormat,
@@ -246,6 +257,8 @@ async function downloadYouTubeVideo(
     let paths = await glob(
       Path.join(VIDEO_DIR, `*_${videoId}.@(mp4|mkv|webm)`)
     );
+
+    console.info(` - Renaming 4k video...`);
 
     if (paths.length) {
       let path = paths[0];
@@ -259,6 +272,8 @@ async function downloadYouTubeVideo(
         url: `${repoVideoPath}${basename}`,
       });
     }
+  } else {
+    console.warn(` - 4k video not available.`);
   }
 
   return { id: videoId, downloads, updatedAt: Date.now() };
