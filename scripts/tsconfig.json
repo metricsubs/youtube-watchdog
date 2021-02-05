@@ -1,0 +1,26 @@
+{
+  "target": "ES2018",
+  "module": "CommonJS",
+  "lib": ["ESNext"],
+  "types": ["node", "./types/human-format"],
+  "importHelpers": true,
+  "esModuleInterop": true,
+  "sourceMap": false,
+  "stripInternal": true,
+  "skipLibCheck": true,
+
+  "strict": true,
+  "strictFunctionTypes": false,
+  "noUnusedLocals": false,
+  "noUnusedParameters": false,
+  "noImplicitReturns": false,
+  "noFallthroughCasesInSwitch": true,
+
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+
+  "outDir": "../dist",
+  "rootDir": ".",
+
+  "newLine": "LF"
+}

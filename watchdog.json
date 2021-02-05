@@ -1,4 +1,5 @@
 {
+  "metaURL": "https://metricsubs-org.gitlab.io/youtube-watchdog/watchdog-meta.json",
   "channels": [
     {
       "name": "TechLinked",
