@@ -16,7 +16,7 @@ import type {
 } from "./@utils/types";
 import * as YouTube from "./@utils/youtube";
 import Axios from "axios";
-import { CI_JOB_ID } from "./@utils/env";
+import { CI_JOB_ID, CLEAN_SLATE } from "./@utils/env";
 import { promisify } from "util";
 import _glob from "glob";
 import { info } from "console";
@@ -29,7 +29,7 @@ async function main() {
 
   let config: WatchdogConfig = await FS.readJSON(CONFIG_JSON_FILE_PATH);
 
-  let metaData = await getLatestMetaData(config);
+  let metaData = CLEAN_SLATE ? undefined : await getLatestMetaData(config);
 
   let metaChannels: WatchdogChannelMeta[] = [];
 
@@ -152,7 +152,7 @@ async function downloadYouTubeVideo(
   let formats = await YouTube.getAvailableFormats(videoId);
 
   let previewFormat = YouTube.selectBestDownloadFormat(formats, "1080p");
-  let repoVideoPath = `${config.repoPublicURL}jobs/${CI_JOB_ID}/artifacts/video/`;
+  let repoVideoPath = `${config.repoPublicURL}-/jobs/${CI_JOB_ID}/artifacts/raw/video/`;
 
   let downloads: WatchdogVideoDownloadFileInfo[] = [];
 
