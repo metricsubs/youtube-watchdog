@@ -1,3 +1,4 @@
+import axios from "axios";
 import Axios, { AxiosError } from "axios";
 import * as ChildProcess from "child_process";
 import humanize from "human-format";
@@ -146,7 +147,7 @@ function parseAudioOnlyFormat(
   if (cols.length !== 3) {
     return undefined;
   }
-  let matches = cols[0].match(/^\d+\s+(.*?)\s+audio only/i);
+  let matches = cols[0].match(/^\d+\s+(.*?)\s+audio only\s+(.*?)\s+(\d+k)/i);
   if (!matches) {
     return undefined;
   }
@@ -156,6 +157,9 @@ function parseAudioOnlyFormat(
   if (!audio) {
     return undefined;
   }
+
+  audio.bitrate = humanize.parse(matches[3]);
+
   let fileSize = humanize.parse(cols[2].trim());
   return {
     code,
@@ -233,17 +237,16 @@ function parseMixedFormat(code: number, line: string): FormatInfo | undefined {
 }
 
 function parseAudioSegment(seg: string): AudioFormatInfo | undefined {
-  let matches = seg.trim().match(/^(.*?)\s*@\s*(.*?)\s+\((.*?)\)/);
+  let matches = seg.trim().match(/^(.*?)\s*\((\d+)Hz\)/);
   if (!matches) {
     return undefined;
   }
   let codec = matches[1];
-  let bitrate = humanize.parse(matches[2]) / 1000;
-  let sampleRate = humanize.parse(matches[3]);
+  let sampleRate = humanize.parse(matches[2]);
 
   return {
     codec,
-    bitrate,
+    bitrate: 0,
     sampleRate,
   };
 }
