@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
 *.log
-*.lock
 public/
 video/
