@@ -1,1 +1,18 @@
+image: registry.gitlab.com/dizys/node-youtube-dl-docker:latest
 
+cache:
+  paths:
+    - node_modules/
+    - .yarn
+
+pages:
+  only:
+    - schedules
+  before_script:
+    - pwd
+    - yarn install --frozen-lockfile
+  script:
+    - yarn watch
+  artifacts:
+    paths:
+      - public
