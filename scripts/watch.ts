@@ -16,7 +16,10 @@ async function main() {
     ],
   };
 
-  await FS.writeFile(WATCHDOG_META_FILE_PATH, JSON.stringify(metaData));
+  await FS.writeFile(
+    WATCHDOG_META_FILE_PATH,
+    JSON.stringify(metaData, undefined, 2)
+  );
 }
 
 main().catch(console.error);
