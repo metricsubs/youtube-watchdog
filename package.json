@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "watch": "rimraf public && yarn watch"
+    "watch": "rimraf public && ts-node scripts/watch.ts"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.6",
