@@ -16,3 +16,4 @@ pages:
   artifacts:
     paths:
       - public
+      - video
