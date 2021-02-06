@@ -1,27 +1,28 @@
 import * as FS from "fs-extra";
 import * as Path from "path";
+import { promisify } from "util";
+
+import Axios from "axios";
+import _glob from "glob";
+
+import {
+  WatchdogChannelMeta,
+  WatchdogMeta,
+  WatchdogVideoDownloadFileInfo,
+  WatchdogVideoMeta,
+} from "../index";
 import {
   CONFIG_JSON_FILE_PATH,
   PUBLIC_DIR,
   VIDEO_DIR,
   WATCHDOG_META_FILE_PATH,
 } from "./@utils/path";
-import type {
-  WatchdogChannelInfo,
-  WatchdogChannelMeta,
-  WatchdogConfig,
-  WatchdogMeta,
-  WatchdogVideoDownloadFileInfo,
-  WatchdogVideoMeta,
-} from "./@utils/types";
+import type { WatchdogChannelInfo, WatchdogConfig } from "./@utils/types";
 import * as YouTube from "./@utils/youtube";
-import Axios from "axios";
 import { CI_JOB_ID, CLEAN_SLATE } from "./@utils/env";
-import { promisify } from "util";
-import _glob from "glob";
-import { info } from "console";
 
 const MAX_SAVED_VIDEO_NUM = 10;
+
 const glob = promisify(_glob);
 
 async function main() {

@@ -1,12 +1,12 @@
-import axios from "axios";
-import Axios, { AxiosError } from "axios";
 import * as ChildProcess from "child_process";
-import humanize from "human-format";
 import * as Path from "path";
+
+import Axios, { AxiosError } from "axios";
+import humanize from "human-format";
+
 import { YOUTUBE_API_KEY } from "./env";
 
 const YOUTUBE_API_GATEWAY = "https://www.googleapis.com/youtube/";
-
 const REGEX_FORMAT_HEADER = /format\s+code\s+extension\s+resolution\s+note/i;
 
 export interface LatestVideoData {
