@@ -319,6 +319,7 @@ async function downloadYouTubeVideo(
     title,
     description,
     duration,
+    uploadDate,
     tags,
     downloads,
     updatedAt: Date.now(),
