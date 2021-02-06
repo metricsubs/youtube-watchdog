@@ -181,6 +181,7 @@ async function downloadYouTubeVideo(
 
   let title: string;
   let description: string;
+  let duration: number;
   let tags: string[] = [];
 
   {
@@ -222,6 +223,10 @@ async function downloadYouTubeVideo(
       throw new Error("Missing description in info.json");
     }
     description = info.description;
+    if (!("duration" in info)) {
+      throw new Error("Missing duration in info.json");
+    }
+    duration = info.duration;
     if ("tags" in info) {
       tags = info.tags;
     }
@@ -308,6 +313,7 @@ async function downloadYouTubeVideo(
     id: videoId,
     title,
     description,
+    duration,
     tags,
     downloads,
     updatedAt: Date.now(),
