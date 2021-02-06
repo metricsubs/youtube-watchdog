@@ -8,6 +8,8 @@ cache:
 pages:
   only:
     - schedules
+  variables:
+    TZ: "Asia/Shanghai"
   before_script:
     - pwd
     - yarn install --frozen-lockfile

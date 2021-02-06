@@ -15,6 +15,7 @@ export interface WatchdogVideoMeta {
   title: string;
   description: string;
   duration: number;
+  uploadDate: string;
   tags: string[];
   downloads: WatchdogVideoDownloadFileInfo[];
   updatedAt: number;
