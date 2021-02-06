@@ -1,6 +1,6 @@
 {
   "name": "@metricsubs/youtube-watchdog",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "git@gitlab.com:metricsubs-org/youtube-watchdog.git",
   "author": "MetricSubs",
   "license": "MIT",
