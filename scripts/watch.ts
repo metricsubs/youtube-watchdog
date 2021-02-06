@@ -283,5 +283,5 @@ async function downloadYouTubeVideo(
     console.warn(` - 4k video not available.`);
   }
 
-  return { id: videoId, downloads, updatedAt: Date.now() };
+  return { id: videoId, downloads, updatedAt: Date.now(), ciJobId: CI_JOB_ID };
 }

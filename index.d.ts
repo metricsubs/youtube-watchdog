@@ -14,6 +14,7 @@ export interface WatchdogVideoMeta {
   id: string;
   downloads: WatchdogVideoDownloadFileInfo[];
   updatedAt: number;
+  ciJobId?: string;
 }
 
 export interface WatchdogChannelMeta {
@@ -26,6 +27,6 @@ export interface WatchdogChannelMeta {
 
 export interface WatchdogMeta {
   updatedAt: number;
-  ciJobId: number;
+  ciJobId?: string;
   channels: WatchdogChannelMeta[];
 }
