@@ -12,6 +12,9 @@ export interface WatchdogVideoDownloadFileInfo {
 
 export interface WatchdogVideoMeta {
   id: string;
+  title: string;
+  description: string;
+  tags: string[];
   downloads: WatchdogVideoDownloadFileInfo[];
   updatedAt: number;
   ciJobId?: string;

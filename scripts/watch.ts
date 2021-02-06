@@ -179,6 +179,10 @@ async function downloadYouTubeVideo(
 
   console.log("Renaming 1080p resource...");
 
+  let title: string;
+  let description: string;
+  let tags: string[] = [];
+
   {
     let paths = await glob(
       Path.join(VIDEO_DIR, `*_${videoId}.@(mp4|mkv|webm)`)
@@ -194,6 +198,40 @@ async function downloadYouTubeVideo(
     await FS.rename(path, newPath);
     downloads.push({
       type: "video-1080p",
+      url: `${repoVideoPath}${basename}`,
+    });
+  }
+  {
+    let paths = await glob(Path.join(VIDEO_DIR, `*_${videoId}.info.json`));
+    if (!paths.length) {
+      throw new Error("Video info json not found");
+    }
+
+    let path = paths[0];
+
+    let info = await FS.readJSON(path);
+    if (typeof info !== "object") {
+      throw new Error("Invalid info.json");
+    }
+
+    if (!("title" in info)) {
+      throw new Error("Missing title in info.json");
+    }
+    title = info.title;
+    if (!("description" in info)) {
+      throw new Error("Missing description in info.json");
+    }
+    description = info.description;
+    if ("tags" in info) {
+      tags = info.tags;
+    }
+    let { dir, name, ext } = Path.parse(path);
+    name = name.replace(/ /g, "_");
+    let basename = `${name}${ext}`;
+    let newPath = Path.join(dir, basename);
+    await FS.rename(path, newPath);
+    downloads.push({
+      type: "info",
       url: `${repoVideoPath}${basename}`,
     });
   }
@@ -233,23 +271,6 @@ async function downloadYouTubeVideo(
       });
     }
   }
-  {
-    let paths = await glob(Path.join(VIDEO_DIR, `*_${videoId}.info.json`));
-    if (!paths.length) {
-      console.warn("Video info json not found.");
-    } else {
-      let path = paths[0];
-      let { dir, name, ext } = Path.parse(path);
-      name = name.replace(/ /g, "_");
-      let basename = `${name}${ext}`;
-      let newPath = Path.join(dir, basename);
-      await FS.rename(path, newPath);
-      downloads.push({
-        type: "info",
-        url: `${repoVideoPath}${basename}`,
-      });
-    }
-  }
 
   let maxFormat = YouTube.selectBestDownloadFormat(formats, "2160p");
 
@@ -283,5 +304,13 @@ async function downloadYouTubeVideo(
     console.warn(` - 4k video not available.`);
   }
 
-  return { id: videoId, downloads, updatedAt: Date.now(), ciJobId: CI_JOB_ID };
+  return {
+    id: videoId,
+    title,
+    description,
+    tags,
+    downloads,
+    updatedAt: Date.now(),
+    ciJobId: CI_JOB_ID,
+  };
 }
