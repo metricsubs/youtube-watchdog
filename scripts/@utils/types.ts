@@ -1,6 +1,7 @@
 export interface WatchdogChannelInfo {
   name: string;
   id: string;
+  description?: string;
 }
 
 export interface WatchdogConfig {
@@ -30,6 +31,7 @@ export interface WatchdogVideoMeta {
 export interface WatchdogChannelMeta {
   name: string;
   id: string;
+  description?: string;
   latestVideoId?: string;
   videos: WatchdogVideoMeta[];
 }

@@ -40,7 +40,12 @@ async function main() {
     );
 
     if (!channelMeta) {
-      channelMeta = { name: channelInfo.name, id: channelInfo.id, videos: [] };
+      channelMeta = {
+        name: channelInfo.name,
+        id: channelInfo.id,
+        description: channelInfo.description,
+        videos: [],
+      };
     }
 
     let newChannelMeta = await runOnChannelAndGenerateMeta(
@@ -135,6 +140,7 @@ async function runOnChannelAndGenerateMeta(
     return {
       name: channelInfo.name,
       id: channelInfo.id,
+      description: channelInfo.description,
       latestVideoId: videoId,
       videos: [videoMeta, ...originalVideos],
     };
