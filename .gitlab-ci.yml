@@ -19,4 +19,4 @@ pages:
     paths:
       - public
       - video
-    expire_in: 7 days
+    expire_in: 12 days
