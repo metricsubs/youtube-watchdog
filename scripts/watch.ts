@@ -290,6 +290,8 @@ async function downloadYouTubeVideo(
     await YouTube.downloadVideo(videoId, {
       toDir: VIDEO_DIR,
       format: maxFormat,
+      writeAutoSub: true,
+      subFormat: "srv3",
     });
 
     let paths = await glob(
@@ -309,6 +311,23 @@ async function downloadYouTubeVideo(
         type: "video-4k",
         url: `${repoVideoPath}${basename}`,
       });
+    }
+    {
+      let paths = await glob(Path.join(VIDEO_DIR, `*_${videoId}.*.srv3`));
+      if (!paths.length) {
+        console.warn("SRV3 subtitles not found.");
+      } else {
+        let path = paths[0];
+        let { dir, name, ext } = Path.parse(path);
+        name = name.replace(/ /g, "_");
+        let basename = `${name}${ext}`;
+        let newPath = Path.join(dir, basename);
+        await FS.rename(path, newPath);
+        downloads.push({
+          type: "subtitles",
+          url: `${repoVideoPath}${basename}`,
+        });
+      }
     }
   } else {
     console.warn(` - 4k video not available.`);

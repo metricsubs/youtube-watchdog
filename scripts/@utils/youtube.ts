@@ -370,6 +370,7 @@ export interface DownloadVideoOptions {
   format?: DownloadFormat;
   writeDescription?: boolean;
   writeAutoSub?: boolean;
+  subFormat?: string;
   writeThumbnail?: boolean;
   writeInfoJson?: boolean;
 }
@@ -390,6 +391,7 @@ export async function downloadVideo(
     filenamePattern = "%(title)s_%(id)s.%(ext)s",
     writeDescription,
     writeAutoSub,
+    subFormat,
     writeThumbnail,
     writeInfoJson,
   } = options;
@@ -422,6 +424,9 @@ export async function downloadVideo(
   }
   if (writeAutoSub) {
     commands.push("--write-auto-sub");
+  }
+  if (subFormat) {
+    commands.push(`--sub-format ${subFormat}`);
   }
   if (writeThumbnail) {
     commands.push("--write-thumbnail");
